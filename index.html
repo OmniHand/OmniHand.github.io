@@ -1,200 +1,586 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OmniHands</title>
-<link href="./js/style.css" rel="stylesheet">
-<script type="text/javascript" src="./js/jquery.mlens-1.0.min.js"></script>
-<script type="text/javascript" src="./js/jquery.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniHands</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #111831;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text: #eef2ff;
+      --muted: #b9c0d9;
+      --accent: #7c9cff;
+      --accent-2: #87e6ff;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max-width: 1140px;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
-  p.serif{
-    font-family:"Times New Roman", Times, serif;
-  }
-  p.sansserif{
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  .text-center {
-    text-align: center;
-  }
-  .button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background-color: rgb(210, 208, 208);
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  .button:hover {
-    background-color: darkgray;
-  }
-  #affiliations {
-    text-align: center;
-    font-size: 1.2em; 
-    margin-top: 10px;
-  }
-</style>
-  
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 156, 255, 0.22), transparent 32%),
+        radial-gradient(circle at top right, rgba(135, 230, 255, 0.18), transparent 28%),
+        linear-gradient(180deg, #070b16 0%, #0b1020 45%, #0d1327 100%);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+      border-radius: var(--radius-lg);
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 11, 22, 0.65);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      color: var(--muted);
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      padding: 72px 0 40px;
+    }
+
+    .hero-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      box-shadow: var(--shadow);
+      padding: 40px;
+    }
+
+    .hero-shell::before {
+      content: "";
+      position: absolute;
+      inset: -30% auto auto -10%;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(124, 156, 255, 0.28), transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -35% auto;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(135, 230, 255, 0.20), transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #d9e2ff;
+      background: rgba(124, 156, 255, 0.14);
+      border: 1px solid rgba(124, 156, 255, 0.24);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 3.7rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-desc {
+      margin: 18px 0 0;
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    .authors,
+    .affiliations {
+      margin-top: 18px;
+      color: #dce2f7;
+      font-size: 1rem;
+    }
+
+    .affiliations {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #9d8cff);
+      color: white;
+      box-shadow: 0 12px 28px rgba(124, 156, 255, 0.35);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero-media {
+      position: relative;
+    }
+
+    .hero-video-card {
+      padding: 12px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-video-card iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: var(--radius-lg);
+      background: #000;
+      display: block;
+    }
+
+    .section {
+      padding: 26px 0;
+    }
+
+    .section-card {
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: var(--shadow);
+      padding: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .section-kicker {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-2);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .media-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .media-frame {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px;
+      border-radius: 22px;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .media-frame:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 156, 255, 0.28);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    .caption {
+      margin: 18px auto 0;
+      max-width: 70ch;
+      text-align: center;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .citation-box {
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-x: auto;
+    }
+
+    .citation-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #dfe6ff;
+    }
+
+    .paper-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      color: var(--accent-2);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .paper-link:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      padding: 34px 0 50px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-shell,
+      .section-card {
+        padding: 22px;
+      }
+
+      .hero {
+        padding-top: 40px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="content">
-  <h1><strong>OmniHands: Towards Robust 4D Hand Mesh Recovery via A Versatile Transformer</strong></h1>
- <p id="authors">Dixuan Lin<sup>1,2</sup>, Yuxiang Zhang<sup>2</sup>, Mengcheng Li<sup>2</sup>, Qi Yan<sup>3</sup>, Qianying Wang<sup>3</sup>, Yebin Liu<sup>2</sup>,<br> Wei Jing<sup>3</sup>, Hongwen Zhang<sup>1*</sup>
- <p id="affiliations"> <sup>1</sup>Beijing Normal University, <sup>2</sup>Tsinghua University, <sup>3</sup> Lenovo </p>
-<p id="github-link" class="text-center"><a href="https://github.com/LinDixuan/OmniHands" target="_blank" class="button">Code</a></p>
- </p>
+  <header class="site-header">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-title">OmniHands</div>
+        <div class="brand-subtitle">Robust 4D hand mesh recovery for interactive hands</div>
+      </div>
+      <nav class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#single-image">Single Image</a>
+        <a href="#interactions">Interactions</a>
+        <a href="#multiview">Multi-Cameras</a>
+      </nav>
+    </div>
+  </header>
 
- <center>
-      <span style="font-size:20px">
-        <a href="https://github.com/LinDixuan/OmniHands" target="_blank">
-          <img style="width:36px;height:36px" src = "https://shubham-goel.github.io/4dhumans/resources/github-mark.svg" alt="Github code"/>
-          <br>
-          Code
-        </a>
-      </span>
- </center>
- </p>
+  <main>
+    <section class="hero" id="overview">
+      <div class="container">
+        <div class="hero-shell">
+          <div class="hero-grid">
+            <div>
+              <div class="eyebrow">Project Page</div>
+              <h1>OmniHands: Towards Robust 4D Hand Mesh Recovery via A Versatile Transformer</h1>
+              <p class="hero-desc">
+                OmniHands robustly recovers interactive hand meshes and their relative motion from monocular inputs, while generalizing to complex interactions and challenging multi-view scenarios.
+              </p>
+              <div class="authors">
+                Dixuan Lin<sup>1,2</sup>, Yuxiang Zhang<sup>2</sup>, Mengcheng Li<sup>2</sup>, Qi Yan<sup>3</sup>, Qianying Wang<sup>3</sup>, Yebin Liu<sup>2</sup>, Wei Jing<sup>3</sup>, Hongwen Zhang<sup>1*</sup>
+              </div>
+              <div class="affiliations">
+                <sup>1</sup>Beijing Normal University &nbsp;&nbsp; <sup>2</sup>Tsinghua University &nbsp;&nbsp; <sup>3</sup>Lenovo
+              </div>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="https://github.com/LinDixuan/OmniHands" target="_blank" rel="noopener noreferrer">
+                  <span>Code</span>
+                </a>
+                <a class="btn btn-secondary" href="https://dl.acm.org/doi/abs/10.1145/3807943" target="_blank" rel="noopener noreferrer">Paper</a>
+                <a class="btn btn-secondary" href="#citation">BibTeX</a>
+              </div>
+            </div>
 
+            <div class="hero-media">
+              <div class="hero-video-card">
+                <iframe
+                  src="https://www.youtube.com/embed/eJivLud-2fI"
+                  title="OmniHands Project Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="row">
-    <div class="col-full">
-      <video  width="100%" loop controls>
-        <source src="files/multi_view_crop.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  
-  <h3 style="text-align:center"><em>OmniHands can robustly recover interactive hand meshes and their relative movement from monocular inputs.</em></h3>
-</div>
+    <section class="section" id="single-image">
+      <div class="container">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Results</div>
+              <h2>Single Image Input</h2>
+              <p class="section-desc">
+                Robust reconstruction results on challenging monocular inputs, including occlusion, unusual pose, and difficult interaction configurations.
+              </p>
+            </div>
+          </div>
 
-<div class="content">
-  <p style="text-align:left; font-size: 2em; font-weight: bold" class="serif">Results - Monocular Video Input</p>
-  
-  <div class="row">
-    <div class="col-full">
-      <video  width="100%" loop controls>
-        <source src="files/clip1.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <video  width="100%" loop controls>
-        <source src="files/clip2.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <video  width="100%" loop controls>
-        <source src="files/clip3.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <video  width="100%" loop controls>
-        <source src="files/clip4.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-  <h3 style="text-align:center"><em>OmniHands outperforms other interactive hand reconstruction methods in real-world videos.</em></h3>
-</div>
+          <div class="media-stack">
+            <div class="media-frame">
+              <img src="files/img/res_1.jpg" alt="Single image result 1">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/res_2.jpg" alt="Single image result 2">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/res_3.jpg" alt="Single image result 3">
+            </div>
+          </div>
 
-<div class="content">
-  <p style="text-align:left; font-size: 2em; font-weight: bold" class="serif">Results - Single Image Input</p>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/res_1.jpg" style="width:100%;">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/res_2.jpg" style="width:100%;">
-    </div>
-  </div>  
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/res_3.jpg" style="width:100%;">
-    </div>
-  </div>
-  <h3 style="text-align:center"><em>OmniHands has robust performance in complex cases.</em></h3>
-</div>
+          <p class="caption"><em>OmniHands demonstrates robust performance in complex single-image cases.</em></p>
+        </div>
+      </div>
+    </section>
 
+    <section class="section" id="interactions">
+      <div class="container">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Results</div>
+              <h2>Complex Interactions</h2>
+              <p class="section-desc">
+                Reconstruction results on dense hand-hand interactions with severe ambiguity, contact, and self-occlusion.
+              </p>
+            </div>
+          </div>
 
-<div class="content">
-  <p style="text-align:left; font-size: 2em; font-weight: bold" class="serif">Results - Complex Interactions</p>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/multi_1.jpg" style="width:100%;">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/multi_2.jpg" style="width:100%;">
-    </div>
-  </div>  
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/multi_3.jpg" style="width:100%;">
-    </div>
-  </div>
-  <h3 style="text-align:center"><em>OmniHands has robust performance in complex cases.</em></h3>
-</div>
+          <div class="media-stack">
+            <div class="media-frame">
+              <img src="files/img/multi_1.jpg" alt="Complex interaction result 1">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/multi_2.jpg" alt="Complex interaction result 2">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/multi_3.jpg" alt="Complex interaction result 3">
+            </div>
+          </div>
 
+          <p class="caption"><em>OmniHands remains stable and accurate in difficult interaction-heavy scenes.</em></p>
+        </div>
+      </div>
+    </section>
 
+    <section class="section" id="multiview">
+      <div class="container">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Results</div>
+              <h2>Multi-Cameras</h2>
+              <p class="section-desc">
+                Applications to multi-view setups show strong robustness under occlusion and large viewpoint changes.
+              </p>
+            </div>
+          </div>
 
-<div class="content">
-  <p style="text-align:left; font-size: 2em; font-weight: bold" class="serif">Results - Multi-Cameras</p>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/mul_01.jpg" style="width:100%;">
+          <div class="media-stack">
+            <div class="media-frame">
+              <img src="files/img/mul_01.jpg" alt="Multi-camera result 1">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/mul_02.jpg" alt="Multi-camera result 2">
+            </div>
+            <div class="media-frame">
+              <img src="files/img/mul_03.jpg" alt="Multi-camera result 3">
+            </div>
+          </div>
+
+          <p class="caption"><em>OmniHands can handle highly occluded cases when applied to multi-view tasks.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="citation">
+      <div class="container">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Citation</div>
+              <h2>Paper and BibTeX</h2>
+              <p class="section-desc">
+                If you find OmniHands useful in your research, please consider citing our paper.
+              </p>
+            </div>
+          </div>
+
+          <a class="paper-link" href="https://dl.acm.org/doi/abs/10.1145/3807943" target="_blank" rel="noopener noreferrer">
+            https://dl.acm.org/doi/abs/10.1145/3807943
+          </a>
+
+          <div class="citation-box">
+            <pre>@article{lin2026omnihands,
+  title={OmniHands: Robust Motion Capture of Interactive Hands via A Versatile Transformer},
+  author={Lin, Dixuan and Zhang, Yuxiang and Li, Mengcheng and Jing, Wei and Yan, Qi and Wang, Qianying and Liu, Yebin and Zhang, Hongwen},
+  journal={ACM Transactions on Graphics},
+  year={2026},
+  publisher={ACM New York, NY}
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © OmniHands Project Page
     </div>
-  </div>
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/mul_02.jpg" style="width:100%;">
-    </div>
-  </div>  
-  <div class="row">
-    <div class="col-full">
-      <img class="summary-img" src="files/img/mul_03.jpg" style="width:100%;">
-    </div>
-  </div>
-  <h3 style="text-align:center"><em>Omnihands can handle highly occluded cases when applied to multi-view tasks.</em></h3>
-</div>
-
-
+  </footer>
 </body>
-
-<script>
-var videos = document.getElementsByClassName("clickplay");
-for (var i = 0; i < videos.length; i++) {
-  videos[i].addEventListener("click", function() {
-    this.play();
-  });
-  videos[i].addEventListener("ended", function() {
-    this.pause();
-    this.currentTime = 0;
-  });
-}
-
-document.querySelectorAll('.info-container').forEach(function(container) {
-  container.addEventListener('mouseover', function() {
-    var infoText = container.querySelector('.info-text');
-    infoText.style.display = 'block';
-  });
-
-  container.addEventListener('mouseout', function() {
-    var infoText = container.querySelector('.info-text');
-    infoText.style.display = 'none';
-  });
-});
-</script>
-
 </html>
